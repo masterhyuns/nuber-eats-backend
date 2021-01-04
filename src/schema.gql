@@ -1,0 +1,11 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# GraphQLModule.forRoot({
+#      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+#    }),
+# 때문에 자동으로 생긴 schema 메모리 사용방식으로 변경
+# ------------------------------------------------------
+
+type Query {
+  isPizza: Boolean!
+}
