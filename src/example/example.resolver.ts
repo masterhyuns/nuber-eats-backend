@@ -1,5 +1,6 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Example } from './entities/example.entity';
+import { CreateExampleDto } from './dtos/create-example.dto';
 
 @Resolver()
 export class ExampleResolver {
@@ -19,5 +20,11 @@ export class ExampleResolver {
     // Example for typescript
     console.log(veganOnly);
     return [];
+  }
+
+  @Mutation((returns) => Boolean)
+  createExample(@Args() createExampleInput: CreateExampleDto): boolean {
+    console.log(createExampleInput);
+    return true;
   }
 }
