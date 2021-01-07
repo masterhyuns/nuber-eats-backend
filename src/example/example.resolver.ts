@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Example } from './entities/example.entity';
 import { CreateExampleDto } from './dtos/create-example.dto';
 import { ExampleService } from './example.service';
+import { UpdateExampleDto } from './dtos/update-example.dto';
 
 @Resolver()
 export class ExampleResolver {
@@ -47,5 +48,12 @@ export class ExampleResolver {
       console.log(e);
       return false;
     }
+  }
+
+  @Mutation((returns) => Boolean)
+  async updateExample(
+    @Args('input') updateExampleDto: UpdateExampleDto,
+  ): Promise<boolean> {
+    return true;
   }
 }
