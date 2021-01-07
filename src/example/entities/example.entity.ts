@@ -15,7 +15,7 @@ export class Example {
   @Field((type) => Boolean, { nullable: true }) // for graphql
   @Column() // for typeorm
   // for graphql null 허용
-  isVegan?: string; // for typescript return type
+  isVegan?: boolean; // for typescript return type
   // for typescript null 허용
 
   @Field((type) => String) // for graphql

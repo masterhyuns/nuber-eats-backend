@@ -25,14 +25,27 @@ export class ExampleResolver {
     return [];
   }
 
-  @Mutation((returns) => Boolean)
+  /*@Mutation((returns) => Boolean)
   createExample(@Args() createExampleInput: CreateExampleDto): boolean {
     console.log(createExampleInput);
     return true;
-  }
+  }*/
 
   @Query((returns) => [Example]) // Boolean for graphql
   getAllExamples(): Promise<Example[]> {
     return this.exampleService.getAllExample();
+  }
+
+  @Mutation((returns) => Boolean)
+  async createExample(
+    @Args() createExampleDto: CreateExampleDto,
+  ): Promise<boolean> {
+    try {
+      await this.exampleService.createExample(createExampleDto);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 }
