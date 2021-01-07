@@ -4,7 +4,7 @@ import { IsBoolean, IsString, Length } from 'class-validator';
 
 @ArgsType() // input 하고자 하는 데이터의 input type
 export class CreateExampleDto {
-  @Field((type) => String) // for graphql return type
+  @Field((type) => String, { nullable: true }) // for graphql return type
   @IsString()
   @Length(5, 10)
   name: string; // for typescript return type
