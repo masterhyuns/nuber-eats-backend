@@ -1,9 +1,12 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Example } from './entities/example.entity';
 import { CreateExampleDto } from './dtos/create-example.dto';
+import { ExampleService } from './example.service';
 
 @Resolver()
 export class ExampleResolver {
+  constructor(private readonly exampleService: ExampleService) {}
+
   @Query((returns) => Boolean) // Boolean for graphql
   isPizza(): boolean {
     // boolean for typescript
@@ -26,5 +29,10 @@ export class ExampleResolver {
   createExample(@Args() createExampleInput: CreateExampleDto): boolean {
     console.log(createExampleInput);
     return true;
+  }
+
+  @Query((returns) => [Example]) // Boolean for graphql
+  getAllExamples(): Promise<Example[]> {
+    return this.exampleService.getAllExample();
   }
 }
