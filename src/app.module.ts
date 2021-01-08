@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { Example } from './example/entities/example.entity';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -33,9 +36,11 @@ import { Example } from './example/entities/example.entity';
       database: process.env.DB_DATABASE,
       synchronize: true,
       logging: true,
-      entities: [Example],
+      entities: [Example, User],
     }),
     ExampleModule,
+    UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
