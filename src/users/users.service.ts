@@ -65,4 +65,8 @@ export class UsersService {
       return CommonUtils.output("Couldn't login");
     }
   }
+
+  async findById(id: number): Promise<User> {
+    return this.repository.findOne({ id });
+  }
 }

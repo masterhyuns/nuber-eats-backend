@@ -14,4 +14,10 @@ export class JwtService {
       algorithm: 'HS256',
     });
   }
+
+  verify(token: string) {
+    return jwt.verify(token, this.options.privateKey, {
+      algorithms: ['HS256'],
+    });
+  }
 }
