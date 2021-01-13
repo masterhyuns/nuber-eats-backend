@@ -3,6 +3,7 @@ import { Example } from './entities/example.entity';
 import { CreateExampleDto } from './dtos/create-example.dto';
 import { ExampleService } from './example.service';
 import { UpdateExampleDto } from './dtos/update-example.dto';
+import { Get } from '@nestjs/common';
 
 @Resolver()
 export class ExampleResolver {
@@ -13,7 +14,6 @@ export class ExampleResolver {
     // boolean for typescript
     return true;
   }
-
   /**
    * @Args() => 필요한 것은 요청 해야 하는데 그 요청을 받아주는 것
    * @Args('veganOnly') veganOnly: boolean  괄호안은 파라미터명, 뒤에는 function을 위한 agruments 명

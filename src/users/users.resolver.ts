@@ -5,6 +5,8 @@ import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { CoreOutput } from '../common/entities/core.output';
 import { CommonUtils } from '../common/common.utils';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -23,8 +25,8 @@ export class UsersResolver {
   }
 
   @Query((returns) => CoreOutput)
+  @UseGuards(AuthGuard)
   async me(@Context() context): Promise<CoreOutput> {
-    console.log(context.user);
     if (context.user) {
       return {
         ok: true,
