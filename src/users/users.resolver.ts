@@ -1,9 +1,10 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { CoreOutput } from '../common/entities/core.output';
+import { CommonUtils } from '../common/common.utils';
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -22,9 +23,14 @@ export class UsersResolver {
   }
 
   @Query((returns) => CoreOutput)
-  async me(): Promise<CoreOutput> {
-    return {
-      ok: true,
-    };
+  async me(@Context() context): Promise<CoreOutput> {
+    console.log(context.user);
+    if (context.user) {
+      return {
+        ok: true,
+      };
+    } else {
+      return CommonUtils.output('User not found');
+    }
   }
 }
