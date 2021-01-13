@@ -7,6 +7,7 @@ import { CoreOutput } from '../common/entities/core.output';
 import { CommonUtils } from '../common/common.utils';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
+import { AuthUser } from '../auth/auth-user.decorator';
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -24,15 +25,9 @@ export class UsersResolver {
     return this.usersService.login(loginInput);
   }
 
-  @Query((returns) => CoreOutput)
+  @Query((returns) => User)
   @UseGuards(AuthGuard)
-  async me(@Context() context): Promise<CoreOutput> {
-    if (context.user) {
-      return {
-        ok: true,
-      };
-    } else {
-      return CommonUtils.output('User not found');
-    }
+  async me(@AuthUser() authUser: User): Promise<User> {
+    return authUser;
   }
 }
