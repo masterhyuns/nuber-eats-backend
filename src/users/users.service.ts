@@ -8,6 +8,7 @@ import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { ConfigService } from '@nestjs/config';
 
 import { JwtService } from '../jwt/jwt.service';
+import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -68,5 +69,28 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     return this.repository.findOne({ id });
+  }
+
+  async editProfile(
+    id: number,
+    { email, password, role }: EditProfileInput,
+  ): Promise<EditProfileOutput> {
+    try {
+      const user = await this.repository.findOne({ id });
+      if (password) {
+        user.password = password;
+      }
+      if (email) {
+        user.email = email;
+      }
+      if (role) {
+        user.role = role;
+      }
+      await this.repository.save(user);
+      return CommonUtils.output();
+    } catch (e) {
+      console.log(e);
+      return CommonUtils.output("Couldn't edit profile");
+    }
   }
 }
