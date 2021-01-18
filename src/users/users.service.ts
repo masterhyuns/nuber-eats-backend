@@ -5,15 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
 import { CommonUtils } from '../common/common.utils';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
-import { ConfigService } from '@nestjs/config';
 
 import { JwtService } from '../jwt/jwt.service';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
+import { UserProfileOutput } from './dtos/user-profile.dto';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
-    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -62,13 +61,17 @@ export class UsersService {
         token,
       };
     } catch (e) {
-      console.log(e);
       return CommonUtils.output("Couldn't login");
     }
   }
 
-  async findById(id: number): Promise<User> {
-    return this.repository.findOne({ id });
+  async findById(id: number): Promise<UserProfileOutput> {
+    try {
+      const user = await this.repository.findOneOrFail({ id });
+      return { ok: true, user };
+    } catch (error) {
+      return CommonUtils.output('User Not Found');
+    }
   }
 
   async editProfile(
@@ -77,6 +80,9 @@ export class UsersService {
   ): Promise<EditProfileOutput> {
     try {
       const user = await this.repository.findOne({ id });
+      if (!user) {
+        return CommonUtils.output('User not found');
+      }
       if (password) {
         user.password = password;
       }
@@ -89,7 +95,6 @@ export class UsersService {
       await this.repository.save(user);
       return CommonUtils.output();
     } catch (e) {
-      console.log(e);
       return CommonUtils.output("Couldn't edit profile");
     }
   }

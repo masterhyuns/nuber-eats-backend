@@ -35,21 +35,7 @@ export class UsersResolver {
   async userProfile(
     @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
-    try {
-      const user = await this.usersService.findById(userProfileInput.userId);
-      if (!user) {
-        throw new Error();
-      }
-      return {
-        ok: true,
-        user,
-      };
-    } catch (e) {
-      return {
-        ok: false,
-        error: 'User not found',
-      };
-    }
+    return await this.usersService.findById(userProfileInput.userId);
   }
 
   @Mutation((returns) => EditProfileOutput)
