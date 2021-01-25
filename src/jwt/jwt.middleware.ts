@@ -1,39 +1,28 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NestMiddleware,
-} from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+import { UserService } from 'src/users/users.service';
 import { JwtService } from './jwt.service';
-import { UsersService } from '../users/users.service';
 
-@Injectable() // dependency 주입을 위해 선언
+@Injectable()
 export class JwtMiddleware implements NestMiddleware {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
   ) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
     if ('x-jwt' in req.headers) {
       const token = req.headers['x-jwt'];
       try {
         const decoded = this.jwtService.verify(token.toString());
         if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
-          const id = decoded['id'];
-
-          const user = await this.usersService.findById(id);
-          req['user'] = user;
+          const { user, ok } = await this.userService.findById(decoded['id']);
+          if (ok) {
+            req['user'] = user;
+          }
         }
-      } catch (e) {
-        throw new InternalServerErrorException();
-      }
+      } catch (e) {}
     }
     next();
   }
 }
-/*
-export function jwtMiddleware(req: Request, res: Response, next: NextFunction) {
-  console.log(req);
-  next();
-}
-*/
